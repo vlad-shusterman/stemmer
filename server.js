@@ -12,6 +12,8 @@ const app = express()
 app.use(morgan('combined'))
 app.use(bodyParser.json())
 app.use(cors())
+app.listen(process.env.PORT || config.port,
+  () => console.log(`Server start on port ${config.port} ...`))
 const Post = require('./src/models/post-model')
 const User = require('./src/models/user-model')
 
