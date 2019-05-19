@@ -15,10 +15,6 @@ app.use(cors())
 const Post = require('./src/models/post-model')
 const User = require('./src/models/user-model')
 
-const staticFileMiddleware = express.static(path.join(__dirname + '/dist'));
-
-app.use(staticFileMiddleware);
-
 mongoose.connect(config.dbURL, { useNewUrlParser: true })
 
 mongoose.connection
@@ -75,6 +71,16 @@ app.post('/sign_in', (req, res) => {
       })
     }
   })
+})
+
+app.get('/sign_in', (req, res) => {
+  User.find({}, 'email role password', (err, users) => {
+    if (err) {
+      res.sendStatus(500)
+    } else {
+      res.send({ users: users })
+    }
+  }).sort({ _id: -1 })
 })
 
 // const history = require('connect-history-api-fallback');
