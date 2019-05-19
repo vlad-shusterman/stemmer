@@ -17,12 +17,12 @@ const Post = require('./src/models/post-model')
 const User = require('./src/models/user-model')
 
 mongoose.connect(config.dbURL, { useNewUrlParser: true })
+app.listen(process.env.PORT || config.port,
+  () => console.log(`Server start on port ${config.port} ...`))
 
 mongoose.connection
   .once('open', () => {
     console.log(`Mongoose - successful connection ...`)
-    app.listen(process.env.PORT || config.port,
-      () => console.log(`Server start on port ${config.port} ...`))
   })
   .on('error', error => console.warn(error))
 
