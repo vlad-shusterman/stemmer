@@ -16,7 +16,7 @@ app.use(cors())
 const Post = require('./src/models/post-model')
 const User = require('./src/models/user-model')
 
-mongoose.connect(process.env.config.dbURL)
+mongoose.connect(process.env.MONGODB_URI)
 
 mongoose.connection
   .once('open', () => {
