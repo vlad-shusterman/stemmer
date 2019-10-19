@@ -1,3 +1,6 @@
+module.exports = stemmer
+
+// Standard suffix manipulations.
 var step2list = {
   ational: 'ate',
   tional: 'tion',
@@ -67,15 +70,11 @@ var step4 = new RegExp(
 
 // Stem `value`.
 // eslint-disable-next-line complexity
-class StemmerClass {
-  constructor(value) {
-    this.value = value;
-  }
-  stemmer() {
+function stemmer(value) {
   var firstCharacterWasLowerCaseY
   var match
 
-  this.value = String(value).toLowerCase()
+  value = String(value).toLowerCase()
 
   // Exit early.
   if (value.length < 3) {
@@ -84,90 +83,84 @@ class StemmerClass {
 
   // Detect initial `y`, make sure it never matches.
   if (
-    this.value.charCodeAt(0) === 121 // Lowercase Y
+    value.charCodeAt(0) === 121 // Lowercase Y
   ) {
     firstCharacterWasLowerCaseY = true
-    this.value = 'Y' + value.substr(1)
+    value = 'Y' + value.substr(1)
   }
 
   // Step 1a.
-  if (sfxSsesOrIes.test(this.value)) {
+  if (sfxSsesOrIes.test(value)) {
     // Remove last two characters.
-    this.value = this.value.substr(0, this.value.length - 2)
-  } else if (sfxS.test(this.value)) {
+    value = value.substr(0, value.length - 2)
+  } else if (sfxS.test(value)) {
     // Remove last character.
-    this.value = this.value.substr(0, value.length - 1)
+    value = value.substr(0, value.length - 1)
   }
 
   // Step 1b.
-  if ((match = sfxEED.exec(this.value))) {
+  if ((match = sfxEED.exec(value))) {
     if (gt0.test(match[1])) {
       // Remove last character.
-      this.value = value.substr(0, this.value.length - 1)
+      value = value.substr(0, value.length - 1)
     }
-  } else if ((match = sfxEdOrIng.exec(this.value)) && vowelInStem.test(match[1])) {
-    this.value = match[1]
+  } else if ((match = sfxEdOrIng.exec(value)) && vowelInStem.test(match[1])) {
+    value = match[1]
 
-    if (sfxAtOrBlOrIz.test(this.value)) {
+    if (sfxAtOrBlOrIz.test(value)) {
       // Append `e`.
-      this.value += 'e'
-    } else if (sfxMultiConsonantLike.test(this.value)) {
+      value += 'e'
+    } else if (sfxMultiConsonantLike.test(value)) {
       // Remove last character.
-      this.value = value.substr(0, this.value.length - 1)
-    } else if (consonantLike.test(this.value)) {
+      value = value.substr(0, value.length - 1)
+    } else if (consonantLike.test(value)) {
       // Append `e`.
-      this.value += 'e'
+      value += 'e'
     }
   }
 
   // Step 1c.
-  if ((match = sfxY.exec(vthis.alue)) && vowelInStem.test(match[1])) {
+  if ((match = sfxY.exec(value)) && vowelInStem.test(match[1])) {
     // Remove suffixing `y` and append `i`.
-    this.value = match[1] + 'i'
+    value = match[1] + 'i'
   }
 
   // Step 2.
-  if ((match = step2.exec(this.value)) && gt0.test(match[1])) {
-    this.value = match[1] + step2list[match[2]]
+  if ((match = step2.exec(value)) && gt0.test(match[1])) {
+    value = match[1] + step2list[match[2]]
   }
 
   // Step 3.
-  if ((match = step3.exec(this.value)) && gt0.test(match[1])) {
-    this.value = match[1] + step3list[match[2]]
+  if ((match = step3.exec(value)) && gt0.test(match[1])) {
+    value = match[1] + step3list[match[2]]
   }
 
   // Step 4.
-  if ((match = step4.exec(this.value))) {
+  if ((match = step4.exec(value))) {
     if (gt1.test(match[1])) {
-      this.value = match[1]
+      value = match[1]
     }
-  } else if ((match = sfxIon.exec(this.value)) && gt1.test(match[1])) {
-    this.value = match[1]
+  } else if ((match = sfxIon.exec(value)) && gt1.test(match[1])) {
+    value = match[1]
   }
 
   // Step 5.
   if (
-    (match = sfxE.exec(this.value)) &&
+    (match = sfxE.exec(value)) &&
     (gt1.test(match[1]) ||
       (eq1.test(match[1]) && !consonantLike.test(match[1])))
   ) {
-    this.value = match[1]
+    value = match[1]
   }
 
-  if (sfxLl.test(this.value) && gt1.test(this.value)) {
-    this.value = value.substr(0, this.value.length - 1)
+  if (sfxLl.test(value) && gt1.test(value)) {
+    value = value.substr(0, value.length - 1)
   }
 
   // Turn initial `Y` back to `y`.
   if (firstCharacterWasLowerCaseY) {
-    this.value = 'y' + this.value.substr(1)
+    value = 'y' + value.substr(1)
   }
 
-  console.log(this.value);
-
-  return this.value
+  return value
 }
-}
-
-module.exports = { StemmerClass };
-
