@@ -50,7 +50,7 @@ app.get('/search', (req, res) => {
 function getCyrillicBase(array) {
   const str = array.join()
   const promise = new Promise((resolve, reject) => {
-    axios.get(encodeURI(`http://165.22.208.187:8081/stem/ru?words=${str}`)).then((result) => {
+    axios.get(encodeURI(`http://165.22.208.187:8081/stem/v2/ru?words=${str}`)).then((result) => {
       resolve(result.data)
     })
   })

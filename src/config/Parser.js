@@ -50,7 +50,17 @@ class Parser {
   }
 
   getBase(array) {
-    return array.map((item) => `${item} - ${stemmer(item)}`)
+    return array.map((item) => `${item} - ${stemmer(item)} - ${this.getWordCount(array, item)}`)
+  }
+
+  getWordCount(arr, word) {
+    let counter = 0
+    arr.forEach((item) => {
+      if (item === word) {
+        counter ++
+      }
+    })
+    return counter
   }
 }
 module.exports = Parser
